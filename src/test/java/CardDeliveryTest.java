@@ -30,6 +30,8 @@ public class CardDeliveryTest {
         $("[data-test-id=agreement]").click();
         $(".button").click();
         $("[data-test-id=notification]").shouldBe(Condition.visible, Duration.ofSeconds(13));
-        $(withText("Успешно")).shouldBe(Condition.visible);
+        $("[data-test-id=notification]").shouldHave(Condition.text("Успешно!\n" +
+                "Встреча успешно забронирована на 02.07.2023"));
+        $(withText("02.07.2023")).shouldBe(Condition.visible);
     }
 }
