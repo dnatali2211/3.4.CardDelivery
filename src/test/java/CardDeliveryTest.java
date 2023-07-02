@@ -10,12 +10,8 @@ import static com.codeborne.selenide.Selenide.*;
 
 public class CardDeliveryTest {
 
-    private String generateDate(int daysToAdd) {
-        LocalDate currentDate = LocalDate.now();
-        LocalDate deliveryDate = currentDate.plusDays(daysToAdd);
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
-        String deliveryDateStr = deliveryDate.format(formatter);
-        return deliveryDateStr;
+    private String generateDate(int addDays, String pattern) {
+        return LocalDate.now().plusDays(addDays).format(DateTimeFormatter.ofPattern(pattern));
     }
 
     @Test
@@ -23,7 +19,7 @@ public class CardDeliveryTest {
         open("http://localhost:9999");
 
         $("[data-test-id=city] input").setValue("Ростов-на-Дону");
-        $("[data-test-id=date] input").doubleClick().sendKeys(generateDate(4));
+        $("[data-test-id=date] input").doubleClick().sendKeys(generateDate(4, "dd.MM.yyyy"));
         $("[data-test-id=name] input").setValue("Федорова Алла-Светлана");
         $("[data-test-id=phone] input").setValue("+79013749921");
         $(withText("Успешно")).shouldBe(Condition.hidden);
@@ -31,6 +27,6 @@ public class CardDeliveryTest {
         $(".button").click();
         $("[data-test-id=notification]").shouldBe(Condition.visible, Duration.ofSeconds(13));
         $("[data-test-id=notification]").shouldHave(Condition.text("Успешно!\n" +
-                "Встреча успешно забронирована на " + generateDate(4))).shouldBe(Condition.visible);
+                "Встреча успешно забронирована на " + generateDate(4, "dd.MM.yyyy"))).shouldBe(Condition.visible);
     }
 }
